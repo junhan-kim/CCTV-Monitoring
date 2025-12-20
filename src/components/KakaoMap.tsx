@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { CCTVService } from '../services/cctvService';
 import { CCTVInfo } from '../types/cctv';
 
@@ -12,16 +12,19 @@ interface KakaoMapProps {
   width?: string;
   height?: string;
   apiKey?: string;
+  debounceMs?: number;
 }
 
 const KakaoMap: React.FC<KakaoMapProps> = ({
   width = '100%',
   height = '100vh',
-  apiKey = process.env.REACT_APP_OPENAPI_ITS_KEY || ''
+  apiKey = process.env.REACT_APP_OPENAPI_ITS_KEY || '',
+  debounceMs = 500
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
+  const debounceTimerRef = useRef<number | null>(null);
   const [cctvService] = useState(() => new CCTVService(apiKey));
 
   const clearMarkers = () => {
@@ -63,6 +66,16 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     }
   };
 
+  const debouncedDrawCCTVMarkers = useCallback((map: any) => {
+    if (debounceTimerRef.current !== null) {
+      window.clearTimeout(debounceTimerRef.current);
+    }
+
+    debounceTimerRef.current = window.setTimeout(() => {
+      drawCCTVMarkers(map);
+    }, debounceMs);
+  }, [debounceMs]);
+
   useEffect(() => {
     if (!mapContainer.current) return;
 
@@ -100,17 +113,20 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     }
 
     kakao.maps.event.addListener(map, 'zoom_changed', () => {
-      drawCCTVMarkers(map);
+      debouncedDrawCCTVMarkers(map);
     });
 
     kakao.maps.event.addListener(map, 'dragend', () => {
-      drawCCTVMarkers(map);
+      debouncedDrawCCTVMarkers(map);
     });
 
     return () => {
+      if (debounceTimerRef.current !== null) {
+        window.clearTimeout(debounceTimerRef.current);
+      }
       clearMarkers();
     };
-  }, [cctvService]);
+  }, [cctvService, debouncedDrawCCTVMarkers]);
 
   return (
     <div

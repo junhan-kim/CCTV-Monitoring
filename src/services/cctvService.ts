@@ -14,6 +14,8 @@ export class CCTVService {
 
     const url = `${OPENAPI_BASE_URL}/cctvInfo?apiKey=${this.apiKey}&type=ex&cctvType=1&minX=${minX}&maxX=${maxX}&minY=${minY}&maxY=${maxY}&getType=json`;
 
+    console.log('🔍 CCTV API 요청:', { minX, maxX, minY, maxY, url });
+
     try {
       const response = await fetch(url);
 
