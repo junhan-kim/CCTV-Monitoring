@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { CCTVService } from '../services/cctvService';
 import { CCTVInfo } from '../types/cctv';
 import HLSPlayer from './HLSPlayer';
+import { MAP_CONSTANTS } from '../constants/map';
 
 declare global {
   interface Window {
@@ -41,15 +42,13 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
       const cctvList = await cctvService.fetchCCTVList(bounds);
 
       const { kakao } = window;
-      const markerImageUrl =
-        'https://toppng.com//public/uploads/preview/cctv-camera-icon-cctv-camera-icon-1156329928317vhhunz9l.png';
 
       cctvList.forEach((cctv: CCTVInfo) => {
         const position = new kakao.maps.LatLng(cctv.coordy, cctv.coordx);
 
         const markerImage = new kakao.maps.MarkerImage(
-          markerImageUrl,
-          new kakao.maps.Size(30, 30)
+          MAP_CONSTANTS.CCTV_MARKER_IMAGE_URL,
+          new kakao.maps.Size(MAP_CONSTANTS.CCTV_MARKER_SIZE.width, MAP_CONSTANTS.CCTV_MARKER_SIZE.height)
         );
 
         const marker = new kakao.maps.Marker({
@@ -92,8 +91,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     }
 
     const options = {
-      center: new kakao.maps.LatLng(37.5665, 126.9780),
-      level: 3
+      center: new kakao.maps.LatLng(MAP_CONSTANTS.DEFAULT_CENTER.lat, MAP_CONSTANTS.DEFAULT_CENTER.lng),
+      level: MAP_CONSTANTS.DEFAULT_ZOOM_LEVEL
     };
 
     const map = new kakao.maps.Map(mapContainer.current, options);
@@ -135,11 +134,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
           console.error('Geolocation 에러:', error);
           drawCCTVMarkers(map);
         },
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0
-        }
+        MAP_CONSTANTS.GEOLOCATION_OPTIONS
       );
     } else {
       drawCCTVMarkers(map);
