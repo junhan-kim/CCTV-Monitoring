@@ -1,13 +1,3 @@
-"""
-CCTV 데이터 업데이트 스크립트
-
-국토교통부 ITS Open API를 통해 전국의 CCTV 데이터를 가져옵니다.
-
-사용법:
-    cd frontend
-    python python-scripts/update-cctv-data.py
-"""
-
 import json
 import os
 import requests

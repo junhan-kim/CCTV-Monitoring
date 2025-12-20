@@ -9,9 +9,9 @@ CCTV-Monitoring/
 ├── frontend/           # React 프론트엔드
 │   ├── src/
 │   ├── public/
-│   ├── python-scripts/ # 데이터 처리 스크립트
 │   ├── Dockerfile
 │   └── package.json
+├── python-scripts/     # 데이터 처리 스크립트
 ├── docker-compose.yml
 ├── .env
 └── README.md
@@ -55,7 +55,7 @@ docker-compose down
 ### 1. Python 패키지 설치 (최초 1회)
 
 ```bash
-pip install -r frontend/python-scripts/requirements.txt
+pip install -r python-scripts/requirements.txt
 ```
 
 ### 2. 노드링크 데이터 다운로드
@@ -69,8 +69,6 @@ pip install -r frontend/python-scripts/requirements.txt
 ### 3. CCTV 데이터 생성
 
 ```bash
-cd frontend
-
 # CCTV 원본 데이터 생성
 python python-scripts/update-cctv-data.py
 

@@ -3,7 +3,8 @@
 from pathlib import Path
 
 # 기준 경로
-FRONTEND_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).parent.parent
+FRONTEND_ROOT = PROJECT_ROOT / 'frontend'
 SRC_DIR = FRONTEND_ROOT / 'src'
 DATAS_DIR = SRC_DIR / 'datas'
 

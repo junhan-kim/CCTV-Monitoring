@@ -1,17 +1,3 @@
-"""
-CCTV 좌표와 교통정보 linkId를 매핑하는 스크립트
-
-원리:
-1. CCTV는 (경도, 위도) 좌표만 가지고 있음
-2. 교통정보 API는 linkId로만 제공됨
-3. 노드링크 Shapefile에는 각 linkId의 실제 도로 좌표가 LineString으로 저장됨
-4. CCTV 좌표에서 가장 가까운 도로 링크를 찾아서 매핑
-
-사용법:
-    cd frontend
-    python python-scripts/map-cctv-to-traffic.py
-"""
-
 import json
 import geopandas as gpd
 from shapely.geometry import Point
@@ -117,15 +103,10 @@ def save_result(data, output_path):
 def main():
     if not CCTV_DATA_FILE.exists():
         print(f"❌ CCTV 데이터 파일을 찾을 수 없습니다: {CCTV_DATA_FILE}")
-        print("💡 먼저 CCTV 데이터를 생성하세요: python python-scripts/update-cctv-data.py")
         return
 
     if not NODELINK_SHAPEFILE.exists():
         print(f"❌ 노드링크 Shapefile을 찾을 수 없습니다: {NODELINK_SHAPEFILE}")
-        print("💡 다음 단계를 따라주세요:")
-        print("   1. https://www.its.go.kr/opendata/opendataList?service=nodelink")
-        print("   2. 표준노드링크 데이터 다운로드")
-        print("   3. 압축 해제 후 파일들을 src/datas/nodelink/ 에 복사")
         return
 
     print("=" * 60)
@@ -158,9 +139,7 @@ if __name__ == '__main__':
     try:
         main()
     except ImportError as e:
-        print("❌ 필요한 패키지를 설치해주세요:")
-        print("   pip install -r python-scripts/requirements.txt")
-        print(f"\n에러: {e}")
+        print(f"❌ 필요한 패키지가 없습니다: {e}")
     except Exception as e:
         print(f"❌ 에러 발생: {e}")
         raise
