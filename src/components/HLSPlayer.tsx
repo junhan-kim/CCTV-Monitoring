@@ -1,14 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Hls from 'hls.js';
 import { TrafficInfoDisplay } from './TrafficInfo';
-import type { CCTVInfo } from '../types/cctv';
-
-interface HLSPlayerProps {
-  url: string;
-  title?: string;
-  onClose?: () => void;
-  cctv?: CCTVInfo;
-}
+import type { HLSPlayerProps } from '../types/player';
 
 const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
   const videoRef = useRef<HTMLVideoElement>(null);

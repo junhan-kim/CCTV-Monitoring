@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getTrafficInfoForCCTV, getSpeedColor, getTrafficStatus, TrafficInfo } from '../services/trafficInfoService';
-import type { CCTVInfo } from '../types/cctv';
-
-interface TrafficInfoProps {
-  cctv: CCTVInfo;
-}
+import { getTrafficInfoForCCTV, getSpeedColor, getTrafficStatus } from '../services/trafficInfoService';
+import type { TrafficInfo, TrafficInfoProps } from '../types/traffic';
 
 export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
   const [trafficInfo, setTrafficInfo] = useState<TrafficInfo | null>(null);

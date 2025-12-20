@@ -1,65 +1,11 @@
 /**
- * 국가교통정보센터 API 서비스
+ * 교통정보 비즈니스 로직 서비스
  */
 
-import { getRequiredEnv } from '../utils/envValidator';
+import { fetchTrafficInfoByArea } from '../adapters/trafficInfoAdapter';
+import type { TrafficInfo, TrafficApiResponse } from '../types/traffic';
 
-const ITS_API_KEY = getRequiredEnv('REACT_APP_OPENAPI_ITS_KEY');
-const ITS_API_BASE_URL = 'https://openapi.its.go.kr:9443/trafficInfo';
-
-export interface TrafficInfo {
-  roadName: string;
-  linkId: string;
-  speed: string;
-  travelTime: string;
-  createdDate: string;
-  startNodeId: string;
-  endNodeId: string;
-}
-
-export interface TrafficApiResponse {
-  header: {
-    resultCode: number;
-    resultMsg: string;
-  };
-  body: {
-    totalCount: number;
-    items: TrafficInfo[];
-  };
-}
-
-/**
- * 특정 영역의 교통정보 조회
- */
-export async function fetchTrafficInfoByArea(
-  minX: number,
-  maxX: number,
-  minY: number,
-  maxY: number
-): Promise<TrafficApiResponse> {
-  const params = new URLSearchParams({
-    apiKey: ITS_API_KEY,
-    type: 'all',
-    minX: minX.toString(),
-    maxX: maxX.toString(),
-    minY: minY.toString(),
-    maxY: maxY.toString(),
-    getType: 'json',
-  });
-
-  const url = `${ITS_API_BASE_URL}?${params}`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('교통정보 API 요청 실패:', error);
-    throw error;
-  }
-}
+export type { TrafficInfo, TrafficApiResponse };
 
 /**
  * CCTV 좌표 주변의 교통정보 조회

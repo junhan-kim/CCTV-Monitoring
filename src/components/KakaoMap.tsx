@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { CCTVService } from '../services/cctvService';
 import { CCTVInfo } from '../types/cctv';
+import { KakaoMapProps } from '../types/map';
 import HLSPlayer from './HLSPlayer';
 import { MAP_CONSTANTS } from '../constants/map';
 
@@ -8,12 +9,6 @@ declare global {
   interface Window {
     kakao: any;
   }
-}
-
-interface KakaoMapProps {
-  width?: string;
-  height?: string;
-  debounceMs?: number;
 }
 
 const KakaoMap: React.FC<KakaoMapProps> = ({
