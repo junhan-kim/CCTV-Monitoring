@@ -16,7 +16,7 @@ REACT_APP_OPENAPI_ITS_KEY=your_api_key_here
 ### 2. Docker로 실행
 
 ```bash
-docker-compose up --build
+docker-compose up --build -d
 ```
 
 ### 3. 브라우저에서 확인
@@ -62,13 +62,5 @@ python python-scripts/map-cctv-to-traffic.py
 ```
 
 **생성된 파일:**
-- `datas/cctv/cctv-data.json` - CCTV 원본 데이터
-- `datas/cctv/cctv-data-with-links.json` - 교통정보 linkId 매핑 완료
-
-### CCTV 데이터 업데이트
-
-```bash
-# 두 스크립트를 순서대로 실행
-python python-scripts/update-cctv-data.py
-python python-scripts/map-cctv-to-traffic.py
-```
+- `cctv-data.json` - CCTV 원본 데이터
+- `cctv-data-with-links.json` - 교통정보 linkId 매핑 완료
