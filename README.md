@@ -6,10 +6,11 @@
 
 ### 1. 환경 변수 설정
 
-`.env` 파일에 카카오 API 키를 설정하세요:
+`.env` 파일에 필요한 API 키를 설정하세요:
 
 ```
-REACT_APP_KAKAO_API_KEY=your_kakao_api_key_here
+REACT_APP_KAKAO_API_KEY=your_api_key_here
+REACT_APP_OPENAPI_ITS_KEY=your_api_key_here
 ```
 
 ### 2. Docker로 실행

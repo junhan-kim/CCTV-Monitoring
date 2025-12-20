@@ -2,7 +2,7 @@
  * 국가교통정보센터 API 연동 모듈
  */
 
-const ITS_API_KEY = '044cd0c0407245a4bb5d2f6d1d8458bd';
+const ITS_API_KEY = process.env.REACT_APP_OPENAPI_ITS_KEY || '';
 const ITS_API_BASE_URL = 'https://openapi.its.go.kr:9443/trafficInfo';
 
 export interface TrafficInfo {
