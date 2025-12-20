@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getTrafficInfoForCCTV, getSpeedColor, getTrafficStatus, TrafficInfo } from '../utils/trafficInfoApi';
+import { getTrafficInfoForCCTV, getSpeedColor, getTrafficStatus, TrafficInfo } from '../services/trafficInfoService';
 import type { CCTVInfo } from '../types/cctv';
 
 interface TrafficInfoProps {

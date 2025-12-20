@@ -1,8 +1,8 @@
 /**
- * 국가교통정보센터 API 연동 모듈
+ * 국가교통정보센터 API 서비스
  */
 
-import { getRequiredEnv } from './envValidator';
+import { getRequiredEnv } from '../utils/envValidator';
 
 const ITS_API_KEY = getRequiredEnv('REACT_APP_OPENAPI_ITS_KEY');
 const ITS_API_BASE_URL = 'https://openapi.its.go.kr:9443/trafficInfo';
@@ -63,11 +63,15 @@ export async function fetchTrafficInfoByArea(
 
 /**
  * CCTV 좌표 주변의 교통정보 조회
+ *
+ * @param coordx CCTV 경도
+ * @param coordy CCTV 위도
+ * @param radius 검색 반경 (도 단위, 기본값: 0.005도 ≈ 500m)
  */
 export async function fetchTrafficInfoByCCTV(
   coordx: number,
   coordy: number,
-  radius: number = 0.1
+  radius: number = 0.005
 ): Promise<TrafficApiResponse> {
   return fetchTrafficInfoByArea(
     coordx - radius,
@@ -75,16 +79,6 @@ export async function fetchTrafficInfoByCCTV(
     coordy - radius,
     coordy + radius
   );
-}
-
-/**
- * 특정 linkId의 교통정보 찾기
- */
-export function findTrafficByLinkId(
-  trafficData: TrafficApiResponse,
-  linkId: string
-): TrafficInfo | null {
-  return trafficData.body.items.find((item) => item.linkId === linkId) || null;
 }
 
 /**
@@ -102,7 +96,13 @@ export async function getTrafficInfoForCCTV(
 ): Promise<TrafficInfo | null> {
   try {
     const trafficData = await fetchTrafficInfoByCCTV(coordx, coordy);
-    return findTrafficByLinkId(trafficData, linkId);
+    const result = trafficData.body.items.find((item) => item.linkId === linkId) || null;
+
+    if (!result) {
+      console.log(`[TrafficService] linkId ${linkId}에 대한 교통정보 없음 (총 ${trafficData.body.totalCount}개 조회)`);
+    }
+
+    return result;
   } catch (error) {
     console.error('CCTV 교통정보 조회 실패:', error);
     return null;
