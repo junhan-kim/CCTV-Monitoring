@@ -1,6 +1,6 @@
-# Kakao Map React App
+# CCTV Monitor
 
-카카오맵 API를 사용한 리액트 앱입니다.
+대한민국 전역의 CCTV를 실시간으로 모니터링할 수 있는 웹 애플리케이션입니다.
 
 ## 시작하기
 
