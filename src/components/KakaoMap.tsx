@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { CCTVService } from '../services/cctvService';
 import { CCTVInfo } from '../types/cctv';
+import HLSPlayer from './HLSPlayer';
 
 declare global {
   interface Window {
@@ -24,6 +25,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
   const markersRef = useRef<any[]>([]);
   const debounceTimerRef = useRef<number | null>(null);
   const [cctvService] = useState(() => new CCTVService());
+  const [selectedCCTV, setSelectedCCTV] = useState<CCTVInfo | null>(null);
 
   const clearMarkers = () => {
     markersRef.current.forEach((marker: any) => marker.setMap(null));
@@ -52,6 +54,10 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
         const marker = new kakao.maps.Marker({
           position,
           image: markerImage,
+        });
+
+        kakao.maps.event.addListener(marker, 'click', () => {
+          setSelectedCCTV(cctv);
         });
 
         marker.setMap(map);
@@ -127,13 +133,22 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
   }, [cctvService, debouncedDrawCCTVMarkers]);
 
   return (
-    <div
-      ref={mapContainer}
-      style={{
-        width,
-        height
-      }}
-    />
+    <React.Fragment>
+      <div
+        ref={mapContainer}
+        style={{
+          width,
+          height
+        }}
+      />
+      {selectedCCTV && (
+        <HLSPlayer
+          url={selectedCCTV.cctvurl}
+          title={selectedCCTV.cctvname}
+          onClose={() => setSelectedCCTV(null)}
+        />
+      )}
+    </React.Fragment>
   );
 };
 
