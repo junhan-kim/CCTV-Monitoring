@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+build
+.git
+.gitignore
+
+# 대용량 데이터 파일
+src/datas/nodelink
+python-scripts
