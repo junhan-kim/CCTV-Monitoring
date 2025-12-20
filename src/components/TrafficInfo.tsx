@@ -12,6 +12,10 @@ export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // CCTV가 바뀌면 이전 교통정보 초기화
+    setTrafficInfo(null);
+    setError(null);
+
     // linkId가 없으면 교통정보 조회 안함
     if (!cctv.linkId) {
       return;
@@ -23,7 +27,12 @@ export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
 
       try {
         const info = await getTrafficInfoForCCTV(cctv.coordx, cctv.coordy, cctv.linkId!);
-        setTrafficInfo(info);
+        if (info) {
+          console.log(`[TrafficInfo] 교통정보 갱신: ${cctv.cctvname} - ${info.speed}km/h at ${new Date().toLocaleTimeString()}`);
+          setTrafficInfo(info);
+        } else {
+          console.log(`[TrafficInfo] 교통정보 없음: ${cctv.cctvname} at ${new Date().toLocaleTimeString()}`);
+        }
       } catch (err) {
         setError('교통정보 조회 실패');
         console.error(err);
@@ -47,19 +56,44 @@ export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
 
   if (loading && !trafficInfo) {
     return (
-      <div className="traffic-info loading">
+      <div className="traffic-info loading" style={{
+        padding: '12px',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        borderRadius: '6px',
+        color: 'white',
+        fontSize: '14px',
+        textAlign: 'center',
+      }}>
         <span>교통정보 조회 중...</span>
       </div>
     );
   }
 
-  if (error || !trafficInfo) {
+  if (error) {
     return null; // 에러 시 조용히 숨김
+  }
+
+  if (!trafficInfo) {
+    return (
+      <div className="traffic-info no-data" style={{
+        padding: '12px',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        borderRadius: '6px',
+        color: 'white',
+        fontSize: '14px',
+        textAlign: 'center',
+        opacity: 0.7,
+      }}>
+        <span>교통정보 없음</span>
+      </div>
+    );
   }
 
   const speed = parseFloat(trafficInfo.speed);
   const speedColor = getSpeedColor(speed);
   const status = getTrafficStatus(speed);
+
+  console.log(`[TrafficInfo] 화면 렌더링 - ${cctv.cctvname}: ${speed}km/h (${status}) at ${new Date().toLocaleTimeString()}`);
 
   return (
     <div className="traffic-info" style={{

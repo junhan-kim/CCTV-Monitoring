@@ -6,10 +6,8 @@ services:
     ports:
       - "3300:3000"
     volumes:
-      - .:/app
       - /app/node_modules
-    environment:
-      - REACT_APP_KAKAO_API_KEY=${REACT_APP_KAKAO_API_KEY}
-      - CHOKIDAR_USEPOLLING=true
+    env_file:
+      - .env
     stdin_open: true
     tty: true

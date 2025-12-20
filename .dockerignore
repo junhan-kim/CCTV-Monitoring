@@ -3,6 +3,5 @@ npm-debug.log
 build
 .git
 .gitignore
-.env
 
 src/datas/nodelink
