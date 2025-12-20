@@ -1,2 +1,0 @@
-datas/nodelink/** filter=lfs diff=lfs merge=lfs -text
-datas/cctv/** filter=lfs diff=lfs merge=lfs -text
