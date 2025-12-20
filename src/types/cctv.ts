@@ -1,16 +1,18 @@
 export interface CCTVInfo {
-  cctvid: string;
   cctvname: string;
+  cctvurl: string;
   coordx: number; // 경도 (longitude)
   coordy: number; // 위도 (latitude)
-  cctvtype: string;
-  cctvurl: string;
-  roadsectionid?: string;
-  filecreatetime?: string;
+  cctvtype: number; // 1 = 고속도로
+  cctvformat: string; // 예: "HLS"
+  cctvresolution: string;
+  roadsectionid: string;
+  filecreatetime: string;
 }
 
 export interface CCTVApiResponse {
   response: {
+    coordtype: number;
     data?: CCTVInfo[];
   };
 }

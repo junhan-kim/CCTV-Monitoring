@@ -1,38 +1,30 @@
 import { CCTVInfo, CCTVApiResponse, CCTVBounds } from '../types/cctv';
-
-const OPENAPI_BASE_URL = 'https://openapi.its.go.kr:9443';
+import cctvDataJson from '../data/cctv-data.json';
 
 export class CCTVService {
-  private apiKey: string;
+  private allCCTVData: CCTVInfo[];
 
-  constructor(apiKey: string) {
-    this.apiKey = apiKey;
+  constructor() {
+    const data = cctvDataJson as CCTVApiResponse;
+    this.allCCTVData = data.response.data || [];
+    console.log(`📦 전국 CCTV 데이터 로드 완료: ${this.allCCTVData.length}개`);
   }
 
   async fetchCCTVList(bounds: CCTVBounds): Promise<CCTVInfo[]> {
     const { minX, maxX, minY, maxY } = bounds;
 
-    const url = `${OPENAPI_BASE_URL}/cctvInfo?apiKey=${this.apiKey}&type=ex&cctvType=1&minX=${minX}&maxX=${maxX}&minY=${minY}&maxY=${maxY}&getType=json`;
+    const filtered = this.allCCTVData.filter((cctv) => {
+      return (
+        cctv.coordx >= minX &&
+        cctv.coordx <= maxX &&
+        cctv.coordy >= minY &&
+        cctv.coordy <= maxY
+      );
+    });
 
-    console.log('🔍 CCTV API 요청:', { minX, maxX, minY, maxY, url });
+    console.log(`🔍 CCTV 필터링: ${filtered.length}개 (bounds: ${minX}, ${minY} ~ ${maxX}, ${maxY})`);
 
-    try {
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('CCTV API 개인 제한량 초과');
-        }
-        throw new Error(`API 요청 실패: ${response.status}`);
-      }
-
-      const data: CCTVApiResponse = await response.json();
-
-      return data.response.data || [];
-    } catch (error) {
-      console.error('CCTV 데이터 조회 실패:', error);
-      throw error;
-    }
+    return filtered;
   }
 
   static getBoundsFromKakaoMap(map: any): CCTVBounds {

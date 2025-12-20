@@ -11,21 +11,19 @@ declare global {
 interface KakaoMapProps {
   width?: string;
   height?: string;
-  apiKey?: string;
   debounceMs?: number;
 }
 
 const KakaoMap: React.FC<KakaoMapProps> = ({
   width = '100%',
   height = '100vh',
-  apiKey = process.env.REACT_APP_OPENAPI_ITS_KEY || '',
   debounceMs = 500
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
   const debounceTimerRef = useRef<number | null>(null);
-  const [cctvService] = useState(() => new CCTVService(apiKey));
+  const [cctvService] = useState(() => new CCTVService());
 
   const clearMarkers = () => {
     markersRef.current.forEach((marker: any) => marker.setMap(null));
