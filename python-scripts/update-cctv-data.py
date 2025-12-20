@@ -116,7 +116,7 @@ def main():
 
         # 파일 저장
         project_root = Path(__file__).parent.parent
-        output_file = project_root / 'datas' / 'cctv' / 'cctv-data.json'
+        output_file = project_root / 'src' / 'datas' / 'cctv' / 'cctv-data.json'
 
         print(f"\n파일 저장 중: {output_file}")
         save_to_file(merged_data, output_file)

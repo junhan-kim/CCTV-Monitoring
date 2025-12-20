@@ -31,8 +31,7 @@ docker-compose down
 
 ## 기능
 
-- 카카오맵 기본 화면 표시 (서울 시청 중심)
-- 지도 타입 컨트롤 (일반지도/스카이뷰)
+- 카카오맵 기본 화면 표시
 - 줌 컨트롤
 - CCTV 실시간 스트리밍 (HLS)
 
@@ -49,7 +48,7 @@ pip install -r python-scripts/requirements.txt
 ```bash
 # https://www.its.go.kr/opendata/opendataList?service=nodelink
 # 위 링크에서 "표준노드링크" 데이터 다운로드
-# 압축 해제 후 모든 파일을 datas/nodelink/ 폴더에 복사
+# 압축 해제 후 모든 파일을 src/datas/nodelink/ 폴더에 복사
 ```
 
 ### 3. CCTV 데이터 생성

@@ -147,9 +147,9 @@ def main():
     # 경로 설정
     project_root = Path(__file__).parent.parent
 
-    cctv_path = project_root / 'datas' / 'cctv' / 'cctv-data.json'
-    shapefile_path = project_root / 'datas' / 'nodelink' / 'MOCT_LINK.shp'
-    output_path = project_root / 'datas' / 'cctv' / 'cctv-data-with-links.json'
+    cctv_path = project_root / 'src' / 'datas' / 'cctv' / 'cctv-data.json'
+    shapefile_path = project_root / 'src' / 'datas' / 'nodelink' / 'MOCT_LINK.shp'
+    output_path = project_root / 'src' / 'datas' / 'cctv' / 'cctv-data-with-links.json'
 
     # 파일 존재 확인
     if not cctv_path.exists():
@@ -162,7 +162,7 @@ def main():
         print(f"💡 다음 단계를 따라주세요:")
         print(f"   1. https://www.its.go.kr/opendata/opendataList?service=nodelink")
         print(f"   2. 표준노드링크 데이터 다운로드")
-        print(f"   3. 압축 해제 후 파일들을 datas/nodelink/ 에 복사")
+        print(f"   3. 압축 해제 후 파일들을 src/datas/nodelink/ 에 복사")
         return
 
     print("=" * 60)
