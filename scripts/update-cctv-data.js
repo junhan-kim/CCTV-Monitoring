@@ -17,7 +17,7 @@ const CONFIG = {
   minY: '33.0', // 최소 위도 (제주도 포함)
   maxY: '43.0', // 최대 위도 (북쪽 끝)
   getType: 'json', // 출력 형식
-  outputFile: path.join(__dirname, 'src', 'data', 'cctv-data.json')
+  outputFile: path.join('src', 'data', 'cctv-data.json')
 };
 
 /**
