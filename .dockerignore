@@ -4,3 +4,5 @@ build
 .git
 .gitignore
 .env
+
+src/datas/nodelink

@@ -1,13 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import Hls from 'hls.js';
+import { TrafficInfoDisplay } from './TrafficInfo';
+import type { CCTVInfo } from '../types/cctv';
 
 interface HLSPlayerProps {
   url: string;
   title?: string;
   onClose?: () => void;
+  cctv?: CCTVInfo;
 }
 
-const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose }) => {
+const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
 
@@ -114,6 +117,13 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose }) => {
           </button>
         )}
       </div>
+
+      {/* 교통정보 표시 */}
+      {cctv && (
+        <div style={{ padding: '10px 15px', backgroundColor: '#1a1a1a' }}>
+          <TrafficInfoDisplay cctv={cctv} />
+        </div>
+      )}
       <video
         ref={videoRef}
         controls

@@ -1,0 +1,15 @@
+# Python dependencies for CCTV data processing
+
+# HTTP requests
+requests>=2.31.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Geospatial data processing
+geopandas>=0.14.0
+shapely>=2.0.0
+pyproj>=3.6.0
+
+# For reading shapefiles
+fiona>=1.9.0

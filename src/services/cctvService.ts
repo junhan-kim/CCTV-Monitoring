@@ -1,5 +1,5 @@
 import { CCTVInfo, CCTVApiResponse, CCTVBounds } from '../types/cctv';
-import cctvDataJson from '../data/cctv-data.json';
+import cctvDataJson from '../datas/cctv/cctv-data-with-links.json';
 
 export class CCTVService {
   private allCCTVData: CCTVInfo[];

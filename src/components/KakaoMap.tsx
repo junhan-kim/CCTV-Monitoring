@@ -169,6 +169,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
         <HLSPlayer
           url={selectedCCTV.cctvurl}
           title={selectedCCTV.cctvname}
+          cctv={selectedCCTV}
           onClose={() => setSelectedCCTV(null)}
         />
       )}

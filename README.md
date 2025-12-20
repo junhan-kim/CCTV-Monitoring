@@ -35,20 +35,40 @@ docker-compose down
 - 줌 컨트롤
 - CCTV 실시간 스트리밍 (HLS)
 
-## CCTV 데이터 자동 업데이트
+## 초기 설정
 
-앱 시작 시 국토교통부 ITS Open API를 통해 자동으로 최신 CCTV 데이터를 가져옵니다.
-
-### 작동 방식
-
-- `npm start` 실행 시 자동으로 CCTV 데이터를 업데이트합니다.
-- 업데이트된 데이터는 `src/data/cctv-data.json` 파일에 저장됩니다.
-- API는 대한민국 전체 지역의 실시간 스트리밍(HLS) CCTV 정보를 제공합니다.
-
-### 수동 업데이트
-
-필요시 수동으로 데이터를 업데이트할 수 있습니다:
+### 1. Python 패키지 설치 (최초 1회)
 
 ```bash
-npm run update-cctv
+pip install -r python-scripts/requirements.txt
+```
+
+### 2. 노드링크 데이터 다운로드
+
+```bash
+# https://www.its.go.kr/opendata/opendataList?service=nodelink
+# 위 링크에서 "표준노드링크" 데이터 다운로드
+# 압축 해제 후 모든 파일을 datas/nodelink/ 폴더에 복사
+```
+
+### 3. CCTV 데이터 생성
+
+```bash
+# CCTV 원본 데이터 생성
+python python-scripts/update-cctv-data.py
+
+# 교통정보 linkId 매핑
+python python-scripts/map-cctv-to-traffic.py
+```
+
+**생성된 파일:**
+- `datas/cctv/cctv-data.json` - CCTV 원본 데이터
+- `datas/cctv/cctv-data-with-links.json` - 교통정보 linkId 매핑 완료
+
+### CCTV 데이터 업데이트
+
+```bash
+# 두 스크립트를 순서대로 실행
+python python-scripts/update-cctv-data.py
+python python-scripts/map-cctv-to-traffic.py
 ```

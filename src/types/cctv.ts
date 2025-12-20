@@ -8,6 +8,10 @@ export interface CCTVInfo {
   cctvresolution: string;
   roadsectionid: string;
   filecreatetime: string;
+  // 교통정보 매핑 필드 (선택적)
+  linkId?: string; // 노드링크 linkId
+  linkRoadName?: string; // 링크 도로명
+  linkDistance?: number; // CCTV와 링크 간 거리(km)
 }
 
 export interface CCTVApiResponse {

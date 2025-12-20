@@ -4,7 +4,7 @@ services:
   kakao-map-app:
     build: .
     ports:
-      - "3000:3000"
+      - "3300:3000"
     volumes:
       - .:/app
       - /app/node_modules
