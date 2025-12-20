@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/node": "^16.18.0",
+    "dotenv": "^17.2.3",
     "hls.js": "^1.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -11,10 +12,12 @@
     "typescript": "^4.9.5"
   },
   "scripts": {
+    "prestart": "node update-cctv-data.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "update-cctv": "node update-cctv-data.js"
   },
   "eslintConfig": {
     "extends": [
