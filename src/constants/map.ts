@@ -1,6 +1,5 @@
 export const MAP_CONSTANTS = {
-  CCTV_MARKER_IMAGE_URL:
-    'https://toppng.com//public/uploads/preview/cctv-camera-icon-cctv-camera-icon-1156329928317vhhunz9l.png',
+  CCTV_MARKER_IMAGE_URL: '/images/cctv-camera.png',
   CCTV_MARKER_SIZE: {
     width: 30,
     height: 30,
