@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import Hls from 'hls.js';
 import { TrafficInfoDisplay } from './TrafficInfo';
 import type { HLSPlayerProps } from '../types/player';
+import { hlsPlayerStyles } from '../styles/hlsPlayer.styles';
 
 const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -66,46 +67,13 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
   }, [url]);
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        bottom: 20,
-        right: 20,
-        width: 480,
-        backgroundColor: '#000',
-        borderRadius: 8,
-        boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
-        zIndex: 1000,
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '10px 15px',
-          backgroundColor: '#1a1a1a',
-          borderTopLeftRadius: 8,
-          borderTopRightRadius: 8,
-        }}
-      >
-        <div style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
+    <div style={hlsPlayerStyles.container}>
+      <div style={hlsPlayerStyles.header}>
+        <div style={hlsPlayerStyles.title}>
           {title || 'CCTV 스트리밍'}
         </div>
         {onClose && (
-          <button
-            onClick={onClose}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#fff',
-              fontSize: 20,
-              cursor: 'pointer',
-              padding: 0,
-              width: 24,
-              height: 24,
-            }}
-          >
+          <button onClick={onClose} style={hlsPlayerStyles.closeButton}>
             ×
           </button>
         )}
@@ -113,20 +81,14 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
 
       {/* 교통정보 표시 */}
       {cctv && (
-        <div style={{ padding: '10px 15px', backgroundColor: '#1a1a1a' }}>
+        <div style={hlsPlayerStyles.trafficInfoContainer}>
           <TrafficInfoDisplay cctv={cctv} />
         </div>
       )}
       <video
         ref={videoRef}
         controls
-        style={{
-          width: '100%',
-          height: 'auto',
-          display: 'block',
-          borderBottomLeftRadius: 8,
-          borderBottomRightRadius: 8,
-        }}
+        style={hlsPlayerStyles.video}
       />
     </div>
   );

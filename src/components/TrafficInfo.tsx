@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getTrafficInfoForCCTV, getSpeedColor, getTrafficStatus } from '../services/trafficInfoService';
 import type { TrafficInfo, TrafficInfoProps } from '../types/traffic';
+import { trafficInfoStyles, trafficBadgeStyles } from '../styles/trafficInfo.styles';
 
 export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
   const [trafficInfo, setTrafficInfo] = useState<TrafficInfo | null>(null);
@@ -52,14 +53,7 @@ export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
 
   if (loading && !trafficInfo) {
     return (
-      <div className="traffic-info loading" style={{
-        padding: '12px',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        borderRadius: '6px',
-        color: 'white',
-        fontSize: '14px',
-        textAlign: 'center',
-      }}>
+      <div className="traffic-info loading" style={trafficInfoStyles.loading}>
         <span>교통정보 조회 중...</span>
       </div>
     );
@@ -71,15 +65,7 @@ export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
 
   if (!trafficInfo) {
     return (
-      <div className="traffic-info no-data" style={{
-        padding: '12px',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        borderRadius: '6px',
-        color: 'white',
-        fontSize: '14px',
-        textAlign: 'center',
-        opacity: 0.7,
-      }}>
+      <div className="traffic-info no-data" style={trafficInfoStyles.noData}>
         <span>교통정보 없음</span>
       </div>
     );
@@ -92,36 +78,22 @@ export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
   console.log(`[TrafficInfo] 화면 렌더링 - ${cctv.cctvname}: ${speed}km/h (${status}) at ${new Date().toLocaleTimeString()}`);
 
   return (
-    <div className="traffic-info" style={{
-      padding: '12px',
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      borderRadius: '6px',
-      color: 'white',
-      fontSize: '14px',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div
-            style={{
-              width: '10px',
-              height: '10px',
-              borderRadius: '50%',
-              backgroundColor: speedColor,
-              boxShadow: `0 0 8px ${speedColor}`,
-            }}
-          />
-          <span style={{ fontWeight: 'bold', fontSize: '15px' }}>{status}</span>
+    <div className="traffic-info" style={trafficInfoStyles.container}>
+      <div style={trafficInfoStyles.speedRow}>
+        <div style={trafficInfoStyles.speedGroup}>
+          <div style={trafficInfoStyles.speedIndicator(speedColor)} />
+          <span style={trafficInfoStyles.statusText}>{status}</span>
         </div>
-        <span style={{ color: speedColor, fontWeight: 'bold', fontSize: '18px' }}>
+        <span style={trafficInfoStyles.speedValue(speedColor)}>
           {speed} km/h
         </span>
       </div>
       {trafficInfo.roadName && (
-        <div style={{ fontSize: '12px', opacity: 0.7, borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '8px' }}>
+        <div style={trafficInfoStyles.roadName}>
           📍 {trafficInfo.roadName}
         </div>
       )}
-      <div style={{ fontSize: '11px', opacity: 0.5, marginTop: '4px' }}>
+      <div style={trafficInfoStyles.travelTime}>
         통행시간: {parseFloat(trafficInfo.travelTime).toFixed(0)}초
       </div>
     </div>
@@ -157,17 +129,7 @@ export const TrafficInfoBadge: React.FC<TrafficInfoProps> = ({ cctv }) => {
   const speedColor = getSpeedColor(speed);
 
   return (
-    <div
-      style={{
-        display: 'inline-block',
-        padding: '2px 6px',
-        backgroundColor: speedColor,
-        color: 'white',
-        borderRadius: '4px',
-        fontSize: '11px',
-        fontWeight: 'bold',
-      }}
-    >
+    <div style={trafficBadgeStyles.badge(speedColor)}>
       {speed} km/h
     </div>
   );
