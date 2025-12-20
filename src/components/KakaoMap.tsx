@@ -24,6 +24,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
   const mapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
   const debounceTimerRef = useRef<number | null>(null);
+  const currentLocationMarkerRef = useRef<any>(null);
   const [cctvService] = useState(() => new CCTVService());
   const [selectedCCTV, setSelectedCCTV] = useState<CCTVInfo | null>(null);
 
@@ -107,13 +108,41 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const { latitude, longitude } = position.coords;
-          map.setCenter(new kakao.maps.LatLng(latitude, longitude));
+          const { latitude, longitude, accuracy } = position.coords;
+          console.log('내 위치:', latitude, longitude);
+          console.log('위치 정확도:', accuracy, '미터');
+
+          const myPosition = new kakao.maps.LatLng(latitude, longitude);
+          map.setCenter(myPosition);
+
+          // 내 위치 마커 추가
+          if (currentLocationMarkerRef.current) {
+            currentLocationMarkerRef.current.setMap(null);
+          }
+
+          const myLocationMarker = new kakao.maps.Marker({
+            position: myPosition,
+            map: map
+          });
+
+          currentLocationMarkerRef.current = myLocationMarker;
+
+          const center = map.getCenter();
+          console.log('지도 중심:', center.getLat(), center.getLng());
+          drawCCTVMarkers(map);
         },
         (error) => {
           console.error('Geolocation 에러:', error);
+          drawCCTVMarkers(map);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
         }
       );
+    } else {
+      drawCCTVMarkers(map);
     }
 
     kakao.maps.event.addListener(map, 'zoom_changed', () => {
