@@ -1,0 +1,20 @@
+[build]
+  publish = "build"
+  command = "npm run build"
+
+# Rate Limiting: IP당 분당 50회 요청 제한
+[[redirects]]
+  from = "/*"
+  to = "/:splat"
+  status = 200
+
+  [redirects.rate_limit]
+    window_limit = 50
+    window_size = 60
+    aggregate_by = ["ip"]
+
+# SPA 라우팅: 존재하지 않는 경로는 index.html로
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
