@@ -8,12 +8,21 @@
 
 ```
 CCTV-Monitoring/
-├── frontend/           # React 프론트엔드
+├── frontend/               # React 프론트엔드
 │   ├── src/
+│   │   ├── adapters/       # 외부 데이터 변환 (API 응답 → 내부 모델)
+│   │   ├── components/     # React UI 컴포넌트
+│   │   ├── constants/      # 상수값 (API URL, SVG 경로, 설정값)
+│   │   ├── datas/          # 정적 JSON 데이터 파일
+│   │   ├── hooks/          # React 커스텀 훅 (use* 접두사, 상태/생명주기 관련)
+│   │   ├── services/       # 외부 API 호출, 비즈니스 로직 (React 독립적)
+│   │   ├── styles/         # CSS 스타일 파일
+│   │   ├── types/          # TypeScript 인터페이스/타입 정의
+│   │   └── utils/          # 유틸리티 함수
 │   ├── public/
 │   ├── Dockerfile
 │   └── package.json
-├── python-scripts/     # 데이터 처리 스크립트
+├── python-scripts/         # 데이터 처리 스크립트
 ├── docker-compose.yml
 ├── .env
 └── README.md
