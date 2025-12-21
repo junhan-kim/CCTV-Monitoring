@@ -24,12 +24,12 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
   const [cctvService] = useState(() => new CCTVService());
   const [selectedCCTV, setSelectedCCTV] = useState<CCTVInfo | null>(null);
 
-  const clearMarkers = () => {
+  const clearMarkers = useCallback(() => {
     markersRef.current.forEach((marker: any) => marker.setMap(null));
     markersRef.current = [];
-  };
+  }, []);
 
-  const drawCCTVMarkers = async (map: any) => {
+  const drawCCTVMarkers = useCallback(async (map: any) => {
     try {
       clearMarkers();
 
@@ -63,7 +63,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     } catch (error) {
       console.error('CCTV 마커 렌더링 실패:', error);
     }
-  };
+  }, [cctvService, clearMarkers]);
 
   const debouncedDrawCCTVMarkers = useCallback((map: any) => {
     if (debounceTimerRef.current !== null) {
@@ -73,7 +73,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     debounceTimerRef.current = window.setTimeout(() => {
       drawCCTVMarkers(map);
     }, debounceMs);
-  }, [debounceMs]);
+  }, [debounceMs, drawCCTVMarkers]);
 
   useEffect(() => {
     if (!mapContainer.current) return;

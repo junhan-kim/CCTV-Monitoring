@@ -8,6 +8,8 @@ export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const cctvName = cctv.cctvname;
+
   useEffect(() => {
     // CCTV가 바뀌면 이전 교통정보 초기화
     setTrafficInfo(null);
@@ -25,10 +27,10 @@ export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
       try {
         const info = await getTrafficInfoForCCTV(cctv.coordx, cctv.coordy, cctv.linkId!);
         if (info) {
-          console.log(`[TrafficInfo] 교통정보 갱신: ${cctv.cctvname} - ${info.speed}km/h at ${new Date().toLocaleTimeString()}`);
+          console.log(`[TrafficInfo] 교통정보 갱신: ${cctvName} - ${info.speed}km/h at ${new Date().toLocaleTimeString()}`);
           setTrafficInfo(info);
         } else {
-          console.log(`[TrafficInfo] 교통정보 없음: ${cctv.cctvname} at ${new Date().toLocaleTimeString()}`);
+          console.log(`[TrafficInfo] 교통정보 없음: ${cctvName} at ${new Date().toLocaleTimeString()}`);
         }
       } catch (err) {
         setError('교통정보 조회 실패');
@@ -44,7 +46,7 @@ export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
     const interval = setInterval(fetchTrafficInfo, 30000);
 
     return () => clearInterval(interval);
-  }, [cctv.linkId, cctv.coordx, cctv.coordy]);
+  }, [cctv.linkId, cctv.coordx, cctv.coordy, cctvName]);
 
   // linkId가 없으면 표시 안함
   if (!cctv.linkId) {
