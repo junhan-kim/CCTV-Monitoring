@@ -4,7 +4,6 @@
 
 interface RequiredEnvVars {
   REACT_APP_KAKAO_API_KEY: string;
-  REACT_APP_OPENAPI_ITS_KEY: string;
 }
 
 /**
@@ -14,7 +13,6 @@ interface RequiredEnvVars {
 export function validateRequiredEnvVars(): void {
   const requiredVars: (keyof RequiredEnvVars)[] = [
     'REACT_APP_KAKAO_API_KEY',
-    'REACT_APP_OPENAPI_ITS_KEY',
   ];
 
   const missingVars: string[] = [];
