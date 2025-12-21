@@ -4,6 +4,17 @@
 
 **Demo:** https://cctv-monitoring-service.netlify.app
 
+## 기술 스택
+
+| 분류 | 기술 |
+|------|------|
+| Frontend | React, TypeScript |
+| 지도 | Kakao Maps SDK |
+| 영상 스트리밍 | HLS.js |
+| 스타일링 | CSS |
+| 배포 | Netlify (Functions 포함) |
+| 데이터 처리 | Python |
+
 ## 프로젝트 구조
 
 ```
