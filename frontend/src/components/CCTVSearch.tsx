@@ -7,10 +7,12 @@ const CCTVSearch: React.FC<CCTVSearchProps> = ({ cctvService, onSelectCCTV }) =>
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<CCTVInfo[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = useCallback((value: string) => {
     setQuery(value);
+    setSelectedIndex(-1);
     if (value.trim()) {
       const searchResults = cctvService.searchByName(value).slice(0, 10);
       setResults(searchResults);
@@ -20,6 +22,35 @@ const CCTVSearch: React.FC<CCTVSearchProps> = ({ cctvService, onSelectCCTV }) =>
       setIsOpen(false);
     }
   }, [cctvService]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (!isOpen || results.length === 0) return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedIndex(prev => (prev < results.length - 1 ? prev + 1 : prev));
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedIndex(prev => (prev > 0 ? prev - 1 : prev));
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedIndex >= 0 && selectedIndex < results.length) {
+          onSelectCCTV(results[selectedIndex]);
+          setQuery('');
+          setResults([]);
+          setIsOpen(false);
+          setSelectedIndex(-1);
+        }
+        break;
+      case 'Escape':
+        setIsOpen(false);
+        setSelectedIndex(-1);
+        break;
+    }
+  }, [isOpen, results, selectedIndex, onSelectCCTV]);
 
   const handleSelect = useCallback((cctv: CCTVInfo) => {
     onSelectCCTV(cctv);
@@ -47,14 +78,15 @@ const CCTVSearch: React.FC<CCTVSearchProps> = ({ cctvService, onSelectCCTV }) =>
         placeholder="CCTV 검색 (예: 강남, 서초)"
         value={query}
         onChange={(e) => handleSearch(e.target.value)}
+        onKeyDown={handleKeyDown}
         onFocus={() => results.length > 0 && setIsOpen(true)}
       />
       {isOpen && results.length > 0 && (
         <ul className="cctv-search-results">
-          {results.map((cctv) => (
+          {results.map((cctv, index) => (
             <li
               key={cctv.roadsectionid}
-              className="cctv-search-result-item"
+              className={`cctv-search-result-item${index === selectedIndex ? ' selected' : ''}`}
               onClick={() => handleSelect(cctv)}
             >
               {cctv.cctvname}
