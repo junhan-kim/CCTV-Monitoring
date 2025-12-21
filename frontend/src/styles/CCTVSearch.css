@@ -1,0 +1,84 @@
+.cctv-search-container {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 300px;
+  max-width: calc(100vw - 20px);
+}
+
+.cctv-search-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.cctv-search-input:focus {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.cctv-search-input::placeholder {
+  color: #999;
+}
+
+.cctv-search-results {
+  margin: 4px 0 0 0;
+  padding: 0;
+  list-style: none;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.cctv-search-result-item {
+  padding: 12px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.cctv-search-result-item:last-child {
+  border-bottom: none;
+}
+
+.cctv-search-result-item:hover {
+  background-color: #f5f5f5;
+}
+
+.cctv-search-result-item:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.cctv-search-result-item:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* 모바일 */
+@media (max-width: 600px) {
+  .cctv-search-container {
+    width: calc(100vw - 80px);
+    left: 10px;
+    transform: none;
+  }
+
+  .cctv-search-input {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .cctv-search-result-item {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+}

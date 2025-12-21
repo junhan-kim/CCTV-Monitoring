@@ -3,6 +3,7 @@ import { CCTVService } from '../services/cctvService';
 import { CCTVInfo } from '../types/cctv';
 import { KakaoMapProps } from '../types/map';
 import HLSPlayer from './HLSPlayer';
+import CCTVSearch from './CCTVSearch';
 import { MAP_CONSTANTS } from '../constants/map';
 
 declare global {
@@ -151,8 +152,21 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     };
   }, [cctvService, debouncedDrawCCTVMarkers, clearMarkers, drawCCTVMarkers]);
 
+  const handleSearchSelect = useCallback((cctv: CCTVInfo) => {
+    if (!mapRef.current) return;
+
+    const { kakao } = window;
+    const position = new kakao.maps.LatLng(cctv.coordy, cctv.coordx);
+
+    mapRef.current.setCenter(position);
+    mapRef.current.setLevel(3);
+
+    setSelectedCCTV(cctv);
+  }, []);
+
   return (
     <React.Fragment>
+      <CCTVSearch cctvService={cctvService} onSelectCCTV={handleSearchSelect} />
       <div
         ref={mapContainer}
         style={{

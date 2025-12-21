@@ -49,6 +49,15 @@ export class CCTVService {
     return filtered;
   }
 
+  searchByName(query: string): CCTVInfo[] {
+    if (!query.trim()) return [];
+
+    const lowerQuery = query.toLowerCase();
+    return this.allCCTVData.filter((cctv) =>
+      cctv.cctvname.toLowerCase().includes(lowerQuery)
+    );
+  }
+
   static getBoundsFromKakaoMap(map: any): CCTVBounds {
     const bounds = map.getBounds();
 

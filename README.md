@@ -2,6 +2,8 @@
 
 대한민국 전역의 CCTV를 실시간으로 모니터링할 수 있는 웹 애플리케이션입니다.
 
+**Demo:** https://cctv-monitoring-service.netlify.app
+
 ## 프로젝트 구조
 
 ```
