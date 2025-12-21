@@ -10,6 +10,13 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const initialSizeRef = useRef<{ width: number; height: number } | null>(null);
   const [size, setSize] = useState({ width: 480, height: 0 });
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 600);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleResizeStart = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -114,7 +121,7 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
     <div
       className="hls-player-container"
       ref={containerRef}
-      style={{
+      style={isMobile ? {} : {
         width: size.width,
         height: size.height > 0 ? size.height : 'auto'
       }}

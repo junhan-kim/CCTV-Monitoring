@@ -1,6 +1,6 @@
 .cctv-search-container {
   position: fixed;
-  top: 15px;
+  top: 60px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
@@ -81,8 +81,9 @@
   }
 
   .cctv-search-input {
-    padding: 10px 14px;
+    padding: 10px 14px 10px 40px;
     font-size: 13px;
+    background-position: 12px center;
   }
 
   .cctv-search-result-item {

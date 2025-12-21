@@ -108,6 +108,21 @@
   .hls-player-traffic-info {
     padding: 8px 12px;
   }
+
+  .hls-player-close-button {
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+
+  /* 모바일에서 리사이즈 핸들 숨김 */
+  .hls-player-resize-left,
+  .hls-player-resize-top,
+  .hls-player-resize-corner {
+    display: none;
+  }
 }
 
 /* 태블릿 (601px ~ 900px) */
