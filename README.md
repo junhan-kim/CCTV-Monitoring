@@ -109,3 +109,9 @@ REACT_APP_CCTV_USE_HTTPS=true
 ```
 
 > HTTPS 모드는 HTTPS 스트리밍 URL을 사용합니다 (Mixed Content 방지)
+
+### 3. Rate Limiting
+
+`netlify.toml`에서 IP당 분당 50회 요청 제한이 설정되어 있습니다.
+- DDoS 및 악의적 봇 트래픽 방지
+- 일반 사용자는 영향 없음 (페이지 로드 시 약 5개 요청)
