@@ -149,7 +149,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
       }
       clearMarkers();
     };
-  }, [cctvService, debouncedDrawCCTVMarkers]);
+  }, [cctvService, debouncedDrawCCTVMarkers, clearMarkers, drawCCTVMarkers]);
 
   return (
     <React.Fragment>
