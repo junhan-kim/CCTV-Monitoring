@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import Hls from 'hls.js';
 import { TrafficInfoDisplay } from './TrafficInfo';
 import type { HLSPlayerProps } from '../types/player';
-import { hlsPlayerStyles } from '../styles/hlsPlayer.styles';
+import '../styles/HLSPlayer.css';
 
 const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -67,13 +67,13 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
   }, [url]);
 
   return (
-    <div style={hlsPlayerStyles.container}>
-      <div style={hlsPlayerStyles.header}>
-        <div style={hlsPlayerStyles.title}>
+    <div className="hls-player-container">
+      <div className="hls-player-header">
+        <div className="hls-player-title">
           {title || 'CCTV 스트리밍'}
         </div>
         {onClose && (
-          <button onClick={onClose} style={hlsPlayerStyles.closeButton}>
+          <button onClick={onClose} className="hls-player-close-button">
             ×
           </button>
         )}
@@ -81,14 +81,14 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
 
       {/* 교통정보 표시 */}
       {cctv && (
-        <div style={hlsPlayerStyles.trafficInfoContainer}>
+        <div className="hls-player-traffic-info">
           <TrafficInfoDisplay cctv={cctv} />
         </div>
       )}
       <video
         ref={videoRef}
         controls
-        style={hlsPlayerStyles.video}
+        className="hls-player-video"
       />
     </div>
   );

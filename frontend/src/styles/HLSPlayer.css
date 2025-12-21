@@ -1,0 +1,86 @@
+.hls-player-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 480px;
+  max-width: calc(100vw - 40px);
+  background-color: #000;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.hls-player-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #1a1a1a;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.hls-player-title {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 40px);
+}
+
+.hls-player-close-button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.hls-player-traffic-info {
+  padding: 10px 15px;
+  background-color: #1a1a1a;
+}
+
+.hls-player-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* 모바일 (600px 이하) */
+@media (max-width: 600px) {
+  .hls-player-container {
+    bottom: 10px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-width: none;
+  }
+
+  .hls-player-header {
+    padding: 8px 12px;
+  }
+
+  .hls-player-title {
+    font-size: 12px;
+  }
+
+  .hls-player-traffic-info {
+    padding: 8px 12px;
+  }
+}
+
+/* 태블릿 (601px ~ 900px) */
+@media (min-width: 601px) and (max-width: 900px) {
+  .hls-player-container {
+    width: 400px;
+  }
+}
