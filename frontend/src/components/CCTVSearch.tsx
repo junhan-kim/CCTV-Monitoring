@@ -59,6 +59,8 @@ const CCTVSearch: React.FC<CCTVSearchProps> = ({ cctvService, onSelectCCTV }) =>
     setIsOpen(false);
   }, [onSelectCCTV]);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -70,12 +72,31 @@ const CCTVSearch: React.FC<CCTVSearchProps> = ({ cctvService, onSelectCCTV }) =>
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const handleSlashKey = (event: KeyboardEvent) => {
+      // 이미 input이나 textarea에 포커스되어 있으면 무시
+      const target = event.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      if (event.key === '/') {
+        event.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleSlashKey);
+    return () => document.removeEventListener('keydown', handleSlashKey);
+  }, []);
+
   return (
     <div className="cctv-search-container" ref={containerRef}>
       <input
+        ref={inputRef}
         type="text"
         className="cctv-search-input"
-        placeholder="CCTV 검색 (예: 강남, 서초)"
+        placeholder="CCTV 검색 (예: 강남, 서초)   '/' 키를 눌러 포커스"
         value={query}
         onChange={(e) => handleSearch(e.target.value)}
         onKeyDown={handleKeyDown}
