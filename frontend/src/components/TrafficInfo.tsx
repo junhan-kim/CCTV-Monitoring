@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getTrafficInfoForCCTV, getSpeedColor, getTrafficStatus } from '../services/trafficInfoService';
 import type { TrafficInfo, TrafficInfoProps } from '../types/traffic';
 import { trafficInfoStyles, trafficBadgeStyles } from '../styles/trafficInfo.styles';
+import { TRAFFIC_REFRESH_INTERVAL_MS } from '../constants/traffic';
 
 export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
   const [trafficInfo, setTrafficInfo] = useState<TrafficInfo | null>(null);
@@ -42,8 +43,7 @@ export const TrafficInfoDisplay: React.FC<TrafficInfoProps> = ({ cctv }) => {
 
     fetchTrafficInfo();
 
-    // 30초마다 업데이트
-    const interval = setInterval(fetchTrafficInfo, 30000);
+    const interval = setInterval(fetchTrafficInfo, TRAFFIC_REFRESH_INTERVAL_MS);
 
     return () => clearInterval(interval);
   }, [cctv.linkId, cctv.coordx, cctv.coordy, cctvName]);
@@ -121,7 +121,7 @@ export const TrafficInfoBadge: React.FC<TrafficInfoProps> = ({ cctv }) => {
     };
 
     fetchTrafficInfo();
-    const interval = setInterval(fetchTrafficInfo, 60000); // 1분마다 업데이트
+    const interval = setInterval(fetchTrafficInfo, TRAFFIC_REFRESH_INTERVAL_MS);
     return () => clearInterval(interval);
   }, [cctv.linkId, cctv.coordx, cctv.coordy]);
 

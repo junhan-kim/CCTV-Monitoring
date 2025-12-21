@@ -4,6 +4,7 @@ import { TrafficInfoDisplay } from './TrafficInfo';
 import type { HLSPlayerProps } from '../types/player';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { ICON_CONSTANTS, SVG_XMLNS } from '../constants/icons';
+import { PLAYER_INITIAL_WIDTH } from '../constants/ui';
 import '../styles/HLSPlayer.css';
 
 const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv, isFavorite, onToggleFavorite }) => {
@@ -11,7 +12,7 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv, isFavo
   const hlsRef = useRef<Hls | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const initialSizeRef = useRef<{ width: number; height: number } | null>(null);
-  const [size, setSize] = useState({ width: 480, height: 0 });
+  const [size, setSize] = useState({ width: PLAYER_INITIAL_WIDTH, height: 0 });
   const isMobile = useIsMobile();
 
   const handleResizeStart = useCallback((e: React.MouseEvent) => {

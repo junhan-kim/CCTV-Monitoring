@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { CCTVInfo } from '../types/cctv';
+import { MAX_FAVORITES } from '../constants/ui';
 
 const STORAGE_KEY = 'cctv-favorites';
-const MAX_FAVORITES = 10;
 
 export function useFavorites() {
   const [favorites, setFavorites] = useState<CCTVInfo[]>([]);

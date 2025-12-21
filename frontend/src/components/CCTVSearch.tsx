@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { CCTVInfo } from '../types/cctv';
 import { CCTVSearchProps } from '../types/search';
+import { MAX_SEARCH_RESULTS } from '../constants/ui';
 import '../styles/CCTVSearch.css';
 
 const CCTVSearch: React.FC<CCTVSearchProps> = ({ cctvService, onSelectCCTV }) => {
@@ -14,7 +15,7 @@ const CCTVSearch: React.FC<CCTVSearchProps> = ({ cctvService, onSelectCCTV }) =>
     setQuery(value);
     setSelectedIndex(-1);
     if (value.trim()) {
-      const searchResults = cctvService.searchByName(value).slice(0, 10);
+      const searchResults = cctvService.searchByName(value).slice(0, MAX_SEARCH_RESULTS);
       setResults(searchResults);
       setIsOpen(true);
     } else {

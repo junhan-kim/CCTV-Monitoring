@@ -6,6 +6,7 @@ import HLSPlayer from './HLSPlayer';
 import CCTVSearch from './CCTVSearch';
 import FavoritesDropdown from './FavoritesDropdown';
 import { MAP_CONSTANTS } from '../constants/map';
+import { MAP_DEBOUNCE_MS, CCTV_SELECTED_ZOOM_LEVEL } from '../constants/ui';
 import { useFavorites } from '../hooks/useFavorites';
 import { useIsMobile } from '../hooks/useIsMobile';
 
@@ -18,7 +19,7 @@ declare global {
 const KakaoMap: React.FC<KakaoMapProps> = ({
   width = '100%',
   height = '100vh',
-  debounceMs = 500
+  debounceMs = MAP_DEBOUNCE_MS
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
@@ -171,7 +172,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     kakao.maps.event.addListener(mapRef.current, 'tilesloaded', handler);
 
     mapRef.current.setCenter(position);
-    mapRef.current.setLevel(3);
+    mapRef.current.setLevel(CCTV_SELECTED_ZOOM_LEVEL);
 
     setSelectedCCTV(cctv);
   }, [drawCCTVMarkers]);

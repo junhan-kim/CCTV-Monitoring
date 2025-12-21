@@ -4,6 +4,12 @@
 
 import { fetchTrafficInfoByArea } from '../adapters/trafficInfoAdapter';
 import type { TrafficInfo, TrafficApiResponse } from '../types/traffic';
+import {
+  TRAFFIC_SEARCH_RADIUS,
+  LINK_ID_MIN_PREFIX_LENGTH,
+  SPEED_THRESHOLDS,
+  SPEED_COLORS,
+} from '../constants/traffic';
 
 export type { TrafficInfo, TrafficApiResponse };
 
@@ -17,7 +23,7 @@ export type { TrafficInfo, TrafficApiResponse };
 export async function fetchTrafficInfoByCCTV(
   coordx: number,
   coordy: number,
-  radius: number = 0.01
+  radius: number = TRAFFIC_SEARCH_RADIUS
 ): Promise<TrafficApiResponse> {
   return fetchTrafficInfoByArea(
     coordx - radius,
@@ -79,8 +85,8 @@ export async function getTrafficInfoForCCTV(
       }
     }
 
-    // 최소 4자리 이상 일치해야 유효한 매칭으로 간주
-    if (bestMatch && bestPrefixLength >= 4) {
+    // 최소 N자리 이상 일치해야 유효한 매칭으로 간주
+    if (bestMatch && bestPrefixLength >= LINK_ID_MIN_PREFIX_LENGTH) {
       console.log(`[TrafficService] linkId ${linkId} → ${bestMatch.linkId} (prefix ${bestPrefixLength}자리 일치)`);
       return bestMatch;
     }
@@ -97,18 +103,18 @@ export async function getTrafficInfoForCCTV(
  * 속도를 기준으로 색상 코드 반환 (교통 혼잡도)
  */
 export function getSpeedColor(speed: number): string {
-  if (speed >= 80) return '#22c55e'; // 녹색 - 원활
-  if (speed >= 60) return '#eab308'; // 노란색 - 보통
-  if (speed >= 40) return '#f97316'; // 주황색 - 서행
-  return '#ef4444'; // 빨간색 - 정체
+  if (speed >= SPEED_THRESHOLDS.SMOOTH) return SPEED_COLORS.SMOOTH;
+  if (speed >= SPEED_THRESHOLDS.NORMAL) return SPEED_COLORS.NORMAL;
+  if (speed >= SPEED_THRESHOLDS.SLOW) return SPEED_COLORS.SLOW;
+  return SPEED_COLORS.CONGESTED;
 }
 
 /**
  * 속도를 기준으로 혼잡도 텍스트 반환
  */
 export function getTrafficStatus(speed: number): string {
-  if (speed >= 80) return '원활';
-  if (speed >= 60) return '보통';
-  if (speed >= 40) return '서행';
+  if (speed >= SPEED_THRESHOLDS.SMOOTH) return '원활';
+  if (speed >= SPEED_THRESHOLDS.NORMAL) return '보통';
+  if (speed >= SPEED_THRESHOLDS.SLOW) return '서행';
   return '정체';
 }
