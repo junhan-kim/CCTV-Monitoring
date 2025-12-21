@@ -163,11 +163,18 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     const { kakao } = window;
     const position = new kakao.maps.LatLng(cctv.coordy, cctv.coordx);
 
+    // 타일 로드 완료 후 마커 렌더링 (일회성)
+    const handler = () => {
+      kakao.maps.event.removeListener(mapRef.current, 'tilesloaded', handler);
+      drawCCTVMarkers(mapRef.current);
+    };
+    kakao.maps.event.addListener(mapRef.current, 'tilesloaded', handler);
+
     mapRef.current.setCenter(position);
     mapRef.current.setLevel(3);
 
     setSelectedCCTV(cctv);
-  }, []);
+  }, [drawCCTVMarkers]);
 
   return (
     <React.Fragment>

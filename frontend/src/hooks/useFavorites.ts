@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { CCTVInfo } from '../types/cctv';
 
 const STORAGE_KEY = 'cctv-favorites';
+const MAX_FAVORITES = 10;
 
 export function useFavorites() {
   const [favorites, setFavorites] = useState<CCTVInfo[]>([]);
@@ -42,6 +43,10 @@ export function useFavorites() {
   const toggleFavorite = useCallback((cctv: CCTVInfo) => {
     setFavorites(prev => {
       const exists = prev.some(f => f.cctvname === cctv.cctvname);
+      if (!exists && prev.length >= MAX_FAVORITES) {
+        alert(`즐겨찾기는 최대 ${MAX_FAVORITES}개까지 등록할 수 있습니다.`);
+        return prev;
+      }
       const newFavorites = exists
         ? prev.filter(f => f.cctvname !== cctv.cctvname)
         : [...prev, cctv];
