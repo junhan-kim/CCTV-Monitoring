@@ -90,9 +90,17 @@ python python-scripts/generate_cctv_data.py --https
 | `cctv-data-https.json` | HTTPS CCTV 원본 데이터 |
 | `cctv-data-https-with-links.json` | HTTPS + 교통정보 linkId 매핑 |
 
-## 배포
+## 배포 (Netlify)
 
-### Netlify 환경변수 설정
+### 1. Build settings
+
+| 항목 | 값 |
+|------|-----|
+| Base directory | `frontend` |
+| Build command | `npm run build` |
+| Publish directory | `frontend/build` |
+
+### 2. 환경변수 설정
 
 ```
 REACT_APP_KAKAO_API_KEY=your_api_key
