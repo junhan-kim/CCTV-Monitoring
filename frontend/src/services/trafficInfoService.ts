@@ -12,12 +12,12 @@ export type { TrafficInfo, TrafficApiResponse };
  *
  * @param coordx CCTV 경도
  * @param coordy CCTV 위도
- * @param radius 검색 반경 (도 단위, 기본값: 0.005도 ≈ 500m)
+ * @param radius 검색 반경 (도 단위, 기본값: 0.01도 ≈ 1km)
  */
 export async function fetchTrafficInfoByCCTV(
   coordx: number,
   coordy: number,
-  radius: number = 0.005
+  radius: number = 0.01
 ): Promise<TrafficApiResponse> {
   return fetchTrafficInfoByArea(
     coordx - radius,
@@ -28,7 +28,19 @@ export async function fetchTrafficInfoByCCTV(
 }
 
 /**
+ * 두 linkId 간의 공통 prefix 길이 계산
+ */
+function getCommonPrefixLength(a: string, b: string): number {
+  let i = 0;
+  while (i < a.length && i < b.length && a[i] === b[i]) {
+    i++;
+  }
+  return i;
+}
+
+/**
  * CCTV의 linkId로 교통정보 조회
+ * linkId가 정확히 일치하지 않으면 가장 유사한(prefix가 긴) linkId 사용
  *
  * @param coordx CCTV 경도
  * @param coordy CCTV 위도
@@ -42,13 +54,39 @@ export async function getTrafficInfoForCCTV(
 ): Promise<TrafficInfo | null> {
   try {
     const trafficData = await fetchTrafficInfoByCCTV(coordx, coordy);
-    const result = trafficData.body.items.find((item) => item.linkId === linkId) || null;
+    const items = trafficData.body.items || [];
 
-    if (!result) {
-      console.log(`[TrafficService] linkId ${linkId}에 대한 교통정보 없음 (총 ${trafficData.body.totalCount}개 조회)`);
+    if (items.length === 0) {
+      return null;
     }
 
-    return result;
+    // 1. 정확히 일치하는 linkId 먼저 찾기
+    const exactMatch = items.find((item) => item.linkId === linkId);
+    if (exactMatch) {
+      console.log(`[TrafficService] linkId ${linkId} 정확히 일치`);
+      return exactMatch;
+    }
+
+    // 2. 정확히 일치하지 않으면 가장 유사한 linkId 찾기 (prefix 매칭)
+    let bestMatch: TrafficInfo | null = null;
+    let bestPrefixLength = 0;
+
+    for (const item of items) {
+      const prefixLength = getCommonPrefixLength(linkId, item.linkId);
+      if (prefixLength > bestPrefixLength) {
+        bestPrefixLength = prefixLength;
+        bestMatch = item;
+      }
+    }
+
+    // 최소 4자리 이상 일치해야 유효한 매칭으로 간주
+    if (bestMatch && bestPrefixLength >= 4) {
+      console.log(`[TrafficService] linkId ${linkId} → ${bestMatch.linkId} (prefix ${bestPrefixLength}자리 일치)`);
+      return bestMatch;
+    }
+
+    console.log(`[TrafficService] linkId ${linkId}에 대한 유사 교통정보 없음 (총 ${items.length}개 조회)`);
+    return null;
   } catch (error) {
     console.error('CCTV 교통정보 조회 실패:', error);
     return null;
