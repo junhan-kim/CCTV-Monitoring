@@ -2,21 +2,17 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Hls from 'hls.js';
 import { TrafficInfoDisplay } from './TrafficInfo';
 import type { HLSPlayerProps } from '../types/player';
+import { useIsMobile } from '../hooks/useIsMobile';
+import { ICON_CONSTANTS, SVG_XMLNS } from '../constants/icons';
 import '../styles/HLSPlayer.css';
 
-const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
+const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv, isFavorite, onToggleFavorite }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const initialSizeRef = useRef<{ width: number; height: number } | null>(null);
   const [size, setSize] = useState({ width: 480, height: 0 });
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 600);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isMobile = useIsMobile();
 
   const handleResizeStart = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -139,6 +135,25 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
         onMouseDown={handleResizeStart}
       />
       <div className="hls-player-header">
+        {!isMobile && onToggleFavorite && (
+          <button
+            onClick={onToggleFavorite}
+            className="hls-player-favorite-button"
+            title={isFavorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}
+          >
+            <svg
+              xmlns={SVG_XMLNS}
+              width="18"
+              height="18"
+              viewBox={ICON_CONSTANTS.STAR.viewBox}
+              fill={isFavorite ? ICON_CONSTANTS.STAR.fillColorActive : ICON_CONSTANTS.STAR.fillColorInactive}
+              stroke={ICON_CONSTANTS.STAR.strokeColor}
+              strokeWidth="2"
+            >
+              <polygon points={ICON_CONSTANTS.STAR.points} />
+            </svg>
+          </button>
+        )}
         <div className="hls-player-title">
           {title || 'CCTV 스트리밍'}
         </div>

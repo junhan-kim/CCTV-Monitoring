@@ -4,7 +4,10 @@ import { CCTVInfo } from '../types/cctv';
 import { KakaoMapProps } from '../types/map';
 import HLSPlayer from './HLSPlayer';
 import CCTVSearch from './CCTVSearch';
+import FavoritesDropdown from './FavoritesDropdown';
 import { MAP_CONSTANTS } from '../constants/map';
+import { useFavorites } from '../hooks/useFavorites';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 declare global {
   interface Window {
@@ -24,6 +27,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
   const currentLocationMarkerRef = useRef<any>(null);
   const [cctvService] = useState(() => new CCTVService());
   const [selectedCCTV, setSelectedCCTV] = useState<CCTVInfo | null>(null);
+  const { favorites, toggleFavorite, isFavorite, removeFavorite } = useFavorites();
+  const isMobile = useIsMobile();
 
   const clearMarkers = useCallback(() => {
     markersRef.current.forEach((marker: any) => marker.setMap(null));
@@ -152,7 +157,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     };
   }, [cctvService, debouncedDrawCCTVMarkers, clearMarkers, drawCCTVMarkers]);
 
-  const handleSearchSelect = useCallback((cctv: CCTVInfo) => {
+  const handleCCTVSelect = useCallback((cctv: CCTVInfo) => {
     if (!mapRef.current) return;
 
     const { kakao } = window;
@@ -166,7 +171,14 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
 
   return (
     <React.Fragment>
-      <CCTVSearch cctvService={cctvService} onSelectCCTV={handleSearchSelect} />
+      {!isMobile && (
+        <FavoritesDropdown
+          favorites={favorites}
+          onSelect={handleCCTVSelect}
+          onRemove={removeFavorite}
+        />
+      )}
+      <CCTVSearch cctvService={cctvService} onSelectCCTV={handleCCTVSelect} />
       <div
         ref={mapContainer}
         style={{
@@ -180,6 +192,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
           title={selectedCCTV.cctvname}
           cctv={selectedCCTV}
           onClose={() => setSelectedCCTV(null)}
+          isFavorite={isFavorite(selectedCCTV.cctvname)}
+          onToggleFavorite={() => toggleFavorite(selectedCCTV)}
         />
       )}
     </React.Fragment>

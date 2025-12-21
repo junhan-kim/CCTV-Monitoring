@@ -5,4 +5,6 @@ export interface HLSPlayerProps {
   title?: string;
   onClose?: () => void;
   cctv?: CCTVInfo;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }

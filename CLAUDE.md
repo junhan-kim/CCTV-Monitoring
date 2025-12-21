@@ -5,6 +5,12 @@
 
 ## 배포 규칙
 - "prod에 배포해" = main 브랜치를 prod 브랜치에 병합 (Netlify 자동 배포됨)
+- 모든 커밋은 반드시 main 브랜치에 먼저 푸시 후, prod로 병합
+- prod 브랜치에 직접 커밋/푸시 금지
+
+## 릴리즈 규칙
+- 릴리즈 생성 시 이전 태그 조회: `gh api repos/{owner}/{repo}/releases/latest`
+- 릴리즈 노트에는 이전 태그 이후의 변경사항 요약 포함
 
 ## Frontend 코드 컨벤션 (frontend/src/)
 

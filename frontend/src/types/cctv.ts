@@ -39,3 +39,9 @@ export interface CCTVBounds {
   minY: number; // 최소 위도
   maxY: number; // 최대 위도
 }
+
+export interface FavoritesDropdownProps {
+  favorites: CCTVInfo[];
+  onSelect: (cctv: CCTVInfo) => void;
+  onRemove: (cctvname: string) => void;
+}
