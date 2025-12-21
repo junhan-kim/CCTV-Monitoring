@@ -37,6 +37,7 @@
     ]
   },
   "devDependencies": {
+    "@netlify/functions": "^5.1.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3"
   }

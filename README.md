@@ -32,13 +32,13 @@ CCTV-Monitoring/
 
 ### 1. 환경 변수 설정
 
-`.env` 파일에 필요한 API 키를 설정하세요:
+`.env.example`을 복사하여 `.env` 파일을 생성하고 API 키를 설정하세요:
 
 ```bash
-REACT_APP_KAKAO_API_KEY=your_api_key_here
-REACT_APP_OPENAPI_ITS_KEY=your_api_key_here
-REACT_APP_CCTV_USE_HTTPS=false  # 로컬: false, 배포: true
+cp .env.example .env
 ```
+
+> 환경변수 설명은 `.env.example` 파일을 참조하세요.
 
 ### 2. Docker로 실행
 
@@ -113,15 +113,22 @@ python python-scripts/generate_cctv_data.py --https
 
 ### 2. 환경변수 설정
 
+Netlify 대시보드에서 환경변수를 설정하세요.
+
+> 환경변수 목록은 `.env.example.netlify` 파일을 참조하세요.
+
+### 3. Netlify Functions (API 프록시)
+
+교통정보 API 키 보호를 위해 Netlify Functions를 프록시로 사용합니다.
+
 ```
-REACT_APP_KAKAO_API_KEY=your_api_key
-REACT_APP_OPENAPI_ITS_KEY=your_api_key
-REACT_APP_CCTV_USE_HTTPS=true
+클라이언트 → /.netlify/functions/traffic-info → ITS API
 ```
 
-> HTTPS 모드는 HTTPS 스트리밍 URL을 사용합니다 (Mixed Content 방지)
+- API 키가 클라이언트(브라우저 개발자도구)에 노출되지 않음
+- `frontend/netlify/functions/` 디렉토리에 함수 정의
 
-### 3. Rate Limiting
+### 4. Rate Limiting
 
 `netlify.toml`에서 IP당 분당 50회 요청 제한이 설정되어 있습니다.
 - DDoS 및 악의적 봇 트래픽 방지

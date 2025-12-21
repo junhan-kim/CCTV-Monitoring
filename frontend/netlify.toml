@@ -2,6 +2,9 @@
   publish = "build"
   command = "npm run build"
 
+[functions]
+  directory = "netlify/functions"
+
 # Rate Limiting: IP당 분당 50회 요청 제한
 [[redirects]]
   from = "/*"
