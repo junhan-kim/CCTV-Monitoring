@@ -1,13 +1,35 @@
 import { CCTVInfo, CCTVApiResponse, CCTVBounds } from '../types/cctv';
-import cctvDataJson from '../datas/cctv/cctv-data-with-links.json';
+
+// 환경변수에 따라 HTTP/HTTPS 데이터 선택
+// 빌드 시점에 결정됨 (CRA는 동적 import 불가)
+import cctvDataHttp from '../datas/cctv/cctv-data-with-links.json';
+// HTTPS 데이터가 없을 수 있으므로 try-catch로 처리하지 않고
+// 빌드 시 USE_HTTPS=true면 HTTPS 파일이 있어야 함
+
+const USE_HTTPS = process.env.REACT_APP_CCTV_USE_HTTPS === 'true';
+
+// HTTPS 모드일 때는 https 파일을, 아니면 http 파일 사용
+// 참고: HTTPS 파일이 없으면 HTTP 파일을 fallback으로 사용
+let cctvDataJson: CCTVApiResponse;
+try {
+  if (USE_HTTPS) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    cctvDataJson = require('../datas/cctv/cctv-data-https-with-links.json');
+  } else {
+    cctvDataJson = cctvDataHttp as CCTVApiResponse;
+  }
+} catch {
+  console.warn('HTTPS CCTV 데이터 없음, HTTP 데이터 사용');
+  cctvDataJson = cctvDataHttp as CCTVApiResponse;
+}
 
 export class CCTVService {
   private allCCTVData: CCTVInfo[];
 
   constructor() {
-    const data = cctvDataJson as CCTVApiResponse;
+    const data = cctvDataJson;
     this.allCCTVData = data.response.data || [];
-    console.log(`📦 전국 CCTV 데이터 로드 완료: ${this.allCCTVData.length}개`);
+    console.log(`📦 전국 CCTV 데이터 로드 완료: ${this.allCCTVData.length}개 (HTTPS: ${USE_HTTPS})`);
   }
 
   async fetchCCTVList(bounds: CCTVBounds): Promise<CCTVInfo[]> {

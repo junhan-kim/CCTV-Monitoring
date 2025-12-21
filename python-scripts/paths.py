@@ -13,6 +13,10 @@ CCTV_DIR = DATAS_DIR / 'cctv'
 CCTV_DATA_FILE = CCTV_DIR / 'cctv-data.json'
 CCTV_DATA_WITH_LINKS_FILE = CCTV_DIR / 'cctv-data-with-links.json'
 
+# CCTV HTTPS 데이터 경로
+CCTV_DATA_HTTPS_FILE = CCTV_DIR / 'cctv-data-https.json'
+CCTV_DATA_HTTPS_WITH_LINKS_FILE = CCTV_DIR / 'cctv-data-https-with-links.json'
+
 # 노드링크 데이터 경로
 NODELINK_DIR = DATAS_DIR / 'nodelink'
 NODELINK_SHAPEFILE = NODELINK_DIR / 'MOCT_LINK.shp'

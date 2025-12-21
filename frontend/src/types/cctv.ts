@@ -1,9 +1,21 @@
+/**
+ * CCTV 유형 (cctvType)
+ * 1: 실시간 스트리밍(HLS) - HTTP
+ * 2: 동영상(mp4) - HTTP
+ * 3: 정지 영상
+ * 4: 실시간 스트리밍(HLS) - HTTPS
+ * 5: 동영상(mp4) - HTTPS
+ *
+ * 도로 유형 (type)
+ * ex: 고속도로
+ * its: 국도
+ */
 export interface CCTVInfo {
   cctvname: string;
   cctvurl: string;
   coordx: number; // 경도 (longitude)
   coordy: number; // 위도 (latitude)
-  cctvtype: number; // 1 = 고속도로
+  cctvtype: number; // CCTV 유형 (1~5)
   cctvformat: string; // 예: "HLS"
   cctvresolution: string;
   roadsectionid: string;
