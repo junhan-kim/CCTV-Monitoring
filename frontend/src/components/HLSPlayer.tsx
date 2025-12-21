@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Hls from 'hls.js';
 import { TrafficInfoDisplay } from './TrafficInfo';
 import type { HLSPlayerProps } from '../types/player';
@@ -7,6 +7,50 @@ import '../styles/HLSPlayer.css';
 const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const initialSizeRef = useRef<{ width: number; height: number } | null>(null);
+  const [size, setSize] = useState({ width: 480, height: 0 });
+
+  const handleResizeStart = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    const container = containerRef.current;
+    if (!container) return;
+
+    // 최초 크기 저장
+    if (!initialSizeRef.current) {
+      initialSizeRef.current = {
+        width: container.offsetWidth,
+        height: container.offsetHeight
+      };
+    }
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startWidth = container.offsetWidth;
+    const startHeight = container.offsetHeight;
+    const aspectRatio = startWidth / startHeight;
+    const minWidth = initialSizeRef.current.width;
+    const maxWidth = initialSizeRef.current.width * 2;
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const deltaX = startX - moveEvent.clientX;
+      const deltaY = startY - moveEvent.clientY;
+      // 더 큰 움직임 기준으로 비율 유지
+      const delta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY * aspectRatio;
+
+      const newWidth = Math.max(minWidth, Math.min(startWidth + delta, maxWidth));
+      const newHeight = newWidth / aspectRatio;
+      setSize({ width: newWidth, height: newHeight });
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  }, []);
 
   useEffect(() => {
     if (!videoRef.current) return;
@@ -67,7 +111,26 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ url, title, onClose, cctv }) => {
   }, [url]);
 
   return (
-    <div className="hls-player-container">
+    <div
+      className="hls-player-container"
+      ref={containerRef}
+      style={{
+        width: size.width,
+        height: size.height > 0 ? size.height : 'auto'
+      }}
+    >
+      <div
+        className="hls-player-resize-left"
+        onMouseDown={handleResizeStart}
+      />
+      <div
+        className="hls-player-resize-top"
+        onMouseDown={handleResizeStart}
+      />
+      <div
+        className="hls-player-resize-corner"
+        onMouseDown={handleResizeStart}
+      />
       <div className="hls-player-header">
         <div className="hls-player-title">
           {title || 'CCTV 스트리밍'}
