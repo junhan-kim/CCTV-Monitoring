@@ -7,6 +7,7 @@
 import type { CCTVInfo, CCTVUrlRefreshResponse } from '../types/cctv';
 import { CCTV_COORD_TOLERANCE } from '../constants/map';
 import { API_BASE_URLS } from '../constants/api';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { isProduction, getItsApiKey, getCCTVType } from '../utils/env';
 
 /**
@@ -53,6 +54,7 @@ export async function refreshCCTVUrl(cctv: CCTVInfo): Promise<CCTVUrlRefreshResp
 }
 
 /** 배포 환경: Netlify Function 프록시 경유 */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function buildProxyUrl(cctv: CCTVInfo, roadType: 'its' | 'ex'): string {
   const x = cctv.coordx;
   const y = cctv.coordy;
