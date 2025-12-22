@@ -1,4 +1,5 @@
 import { CCTVInfo, CCTVApiResponse, CCTVBounds } from '../types/cctv';
+import { refreshCCTVUrl as refreshCCTVUrlFromApi } from '../adapters/cctvUrlAdapter';
 
 // 환경변수에 따라 HTTP/HTTPS 데이터 선택
 // 빌드 시점에 결정됨 (CRA는 동적 import 불가)
@@ -67,5 +68,13 @@ export class CCTVService {
       minY: bounds.getSouthWest().getLat(),
       maxY: bounds.getNorthEast().getLat(),
     };
+  }
+
+  /**
+   * CCTV의 HLS URL을 갱신합니다.
+   * HLS URL은 만료 기한이 있어 재생 시점에 새로운 URL을 받아와야 합니다.
+   */
+  refreshCCTVUrl(cctv: CCTVInfo) {
+    return refreshCCTVUrlFromApi(cctv);
   }
 }

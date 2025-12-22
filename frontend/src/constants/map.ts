@@ -15,3 +15,6 @@ export const MAP_CONSTANTS = {
     maximumAge: 0,
   },
 } as const;
+
+// CCTV 좌표 검색을 위한 오차 범위 (약 500m)
+export const CCTV_COORD_TOLERANCE = 0.005;

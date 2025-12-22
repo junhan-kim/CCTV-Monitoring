@@ -24,6 +24,7 @@ export interface CCTVInfo {
   linkId?: string; // 노드링크 linkId
   linkRoadName?: string; // 링크 도로명
   linkDistance?: number; // CCTV와 링크 간 거리(km)
+  roadType?: 'its' | 'ex'; // 도로 타입 (its=국도, ex=고속도로)
 }
 
 export interface CCTVApiResponse {
@@ -44,4 +45,11 @@ export interface FavoritesDropdownProps {
   favorites: CCTVInfo[];
   onSelect: (cctv: CCTVInfo) => void;
   onRemove: (cctvname: string) => void;
+}
+
+export interface CCTVUrlRefreshResponse {
+  cctvurl: string;
+  cctvname: string;
+  coordx: string;
+  coordy: string;
 }

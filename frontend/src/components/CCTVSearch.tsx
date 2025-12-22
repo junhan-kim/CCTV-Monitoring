@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { CCTVInfo } from '../types/cctv';
 import { CCTVSearchProps } from '../types/search';
 import { MAX_SEARCH_RESULTS } from '../constants/ui';
+import { getCCTVKey } from '../utils/cctv';
 import '../styles/CCTVSearch.css';
 
 const CCTVSearch: React.FC<CCTVSearchProps> = ({ cctvService, onSelectCCTV }) => {
@@ -107,7 +108,7 @@ const CCTVSearch: React.FC<CCTVSearchProps> = ({ cctvService, onSelectCCTV }) =>
         <ul className="cctv-search-results">
           {results.map((cctv, index) => (
             <li
-              key={cctv.roadsectionid}
+              key={getCCTVKey(cctv)}
               className={`cctv-search-result-item${index === selectedIndex ? ' selected' : ''}`}
               onClick={() => handleSelect(cctv)}
             >

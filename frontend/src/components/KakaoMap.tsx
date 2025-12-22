@@ -9,6 +9,7 @@ import { MAP_CONSTANTS } from '../constants/map';
 import { MAP_DEBOUNCE_MS, CCTV_SELECTED_ZOOM_LEVEL } from '../constants/ui';
 import { useFavorites } from '../hooks/useFavorites';
 import { useIsMobile } from '../hooks/useIsMobile';
+import '../styles/KakaoMap.css';
 
 declare global {
   interface Window {
@@ -28,6 +29,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
   const currentLocationMarkerRef = useRef<any>(null);
   const [cctvService] = useState(() => new CCTVService());
   const [selectedCCTV, setSelectedCCTV] = useState<CCTVInfo | null>(null);
+  const [isLoadingUrl, setIsLoadingUrl] = useState(false);
   const { favorites, toggleFavorite, isFavorite, removeFavorite } = useFavorites();
   const isMobile = useIsMobile();
 
@@ -35,6 +37,22 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     markersRef.current.forEach((marker: any) => marker.setMap(null));
     markersRef.current = [];
   }, []);
+
+  const selectCCTVWithFreshUrl = useCallback(async (cctv: CCTVInfo) => {
+    setIsLoadingUrl(true);
+    try {
+      const refreshed = await cctvService.refreshCCTVUrl(cctv);
+      setSelectedCCTV({
+        ...cctv,
+        cctvurl: refreshed.cctvurl,
+      });
+    } catch (error) {
+      console.error('CCTV URL 갱신 실패:', error);
+      alert('CCTV 스트림을 불러올 수 없습니다.');
+    } finally {
+      setIsLoadingUrl(false);
+    }
+  }, [cctvService]);
 
   const drawCCTVMarkers = useCallback(async (map: any) => {
     try {
@@ -58,8 +76,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
           image: markerImage,
         });
 
-        kakao.maps.event.addListener(marker, 'click', () => {
-          setSelectedCCTV(cctv);
+        kakao.maps.event.addListener(marker, 'click', async () => {
+          await selectCCTVWithFreshUrl(cctv);
         });
 
         marker.setMap(map);
@@ -70,7 +88,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     } catch (error) {
       console.error('CCTV 마커 렌더링 실패:', error);
     }
-  }, [cctvService, clearMarkers]);
+  }, [cctvService, clearMarkers, selectCCTVWithFreshUrl]);
 
   const debouncedDrawCCTVMarkers = useCallback((map: any) => {
     if (debounceTimerRef.current !== null) {
@@ -158,7 +176,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     };
   }, [cctvService, debouncedDrawCCTVMarkers, clearMarkers, drawCCTVMarkers]);
 
-  const handleCCTVSelect = useCallback((cctv: CCTVInfo) => {
+  const handleCCTVSelect = useCallback(async (cctv: CCTVInfo) => {
     if (!mapRef.current) return;
 
     const { kakao } = window;
@@ -174,8 +192,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     mapRef.current.setCenter(position);
     mapRef.current.setLevel(CCTV_SELECTED_ZOOM_LEVEL);
 
-    setSelectedCCTV(cctv);
-  }, [drawCCTVMarkers]);
+    await selectCCTVWithFreshUrl(cctv);
+  }, [drawCCTVMarkers, selectCCTVWithFreshUrl]);
 
   return (
     <React.Fragment>
@@ -194,6 +212,11 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
           height
         }}
       />
+      {isLoadingUrl && (
+        <div className="cctv-loading-overlay">
+          <div className="cctv-loading-spinner">CCTV 연결 중...</div>
+        </div>
+      )}
       {selectedCCTV && (
         <HLSPlayer
           url={selectedCCTV.cctvurl}

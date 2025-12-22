@@ -5,10 +5,8 @@
  */
 
 import type { TrafficApiResponse } from '../types/traffic';
-
-const IS_PRODUCTION = process.env.NODE_ENV === 'production';
-const ITS_API_KEY = process.env.REACT_APP_OPENAPI_ITS_KEY;
-const ITS_API_BASE_URL = 'https://openapi.its.go.kr:9443/trafficInfo';
+import { API_BASE_URLS } from '../constants/api';
+import { isProduction, getItsApiKey } from '../utils/env';
 
 /**
  * 특정 영역의 교통정보 조회
@@ -19,7 +17,7 @@ export async function fetchTrafficInfoByArea(
   minY: number,
   maxY: number
 ): Promise<TrafficApiResponse> {
-  const url = IS_PRODUCTION
+  const url = isProduction()
     ? buildProxyUrl(minX, maxX, minY, maxY)
     : buildDirectUrl(minX, maxX, minY, maxY);
 
@@ -49,7 +47,7 @@ function buildProxyUrl(minX: number, maxX: number, minY: number, maxY: number): 
 /** 로컬 환경: 직접 API 호출 */
 function buildDirectUrl(minX: number, maxX: number, minY: number, maxY: number): string {
   const params = new URLSearchParams({
-    apiKey: ITS_API_KEY || '',
+    apiKey: getItsApiKey(),
     type: 'all',
     minX: minX.toString(),
     maxX: maxX.toString(),
@@ -57,5 +55,5 @@ function buildDirectUrl(minX: number, maxX: number, minY: number, maxY: number):
     maxY: maxY.toString(),
     getType: 'json',
   });
-  return `${ITS_API_BASE_URL}?${params}`;
+  return `${API_BASE_URLS.ITS}/trafficInfo?${params}`;
 }

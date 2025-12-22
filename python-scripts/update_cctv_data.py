@@ -76,6 +76,12 @@ def download_and_merge(cctv_type, output_file):
     if not ex_data or 'response' not in ex_data or not its_data or 'response' not in its_data:
         raise Exception('유효하지 않은 API 응답')
 
+    # 각 CCTV에 도로 타입 추가 (ex=고속도로, its=국도)
+    for cctv in ex_data['response']['data']:
+        cctv['roadType'] = 'ex'
+    for cctv in its_data['response']['data']:
+        cctv['roadType'] = 'its'
+
     merged_data = {
         'response': {
             'coordtype': ex_data['response']['coordtype'],
