@@ -54,6 +54,12 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     }
   }, [cctvService]);
 
+  const getMarkerSize = useCallback((zoomLevel: number) => {
+    // 줌 레벨 1(가장 확대) ~ 14(가장 축소), 확대할수록 마커 크게
+    const size = MAP_CONSTANTS.CCTV_MARKER_SIZE_MAX - (zoomLevel - 1) * 2;
+    return Math.max(MAP_CONSTANTS.CCTV_MARKER_SIZE_MIN, Math.min(MAP_CONSTANTS.CCTV_MARKER_SIZE_MAX, size));
+  }, []);
+
   const drawCCTVMarkers = useCallback(async (map: any) => {
     try {
       clearMarkers();
@@ -62,18 +68,20 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
       const cctvList = await cctvService.fetchCCTVList(bounds);
 
       const { kakao } = window;
+      const markerSize = getMarkerSize(map.getLevel());
 
       cctvList.forEach((cctv: CCTVInfo) => {
         const position = new kakao.maps.LatLng(cctv.coordy, cctv.coordx);
 
         const markerImage = new kakao.maps.MarkerImage(
           MAP_CONSTANTS.CCTV_MARKER_IMAGE_URL,
-          new kakao.maps.Size(MAP_CONSTANTS.CCTV_MARKER_SIZE.width, MAP_CONSTANTS.CCTV_MARKER_SIZE.height)
+          new kakao.maps.Size(markerSize, markerSize)
         );
 
         const marker = new kakao.maps.Marker({
           position,
           image: markerImage,
+          title: cctv.cctvname,
         });
 
         kakao.maps.event.addListener(marker, 'click', async () => {
@@ -88,7 +96,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({
     } catch (error) {
       console.error('CCTV 마커 렌더링 실패:', error);
     }
-  }, [cctvService, clearMarkers, selectCCTVWithFreshUrl]);
+  }, [cctvService, clearMarkers, selectCCTVWithFreshUrl, getMarkerSize]);
 
   const debouncedDrawCCTVMarkers = useCallback((map: any) => {
     if (debounceTimerRef.current !== null) {

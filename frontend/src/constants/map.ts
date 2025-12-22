@@ -1,9 +1,7 @@
 export const MAP_CONSTANTS = {
   CCTV_MARKER_IMAGE_URL: '/images/cctv-camera.png',
-  CCTV_MARKER_SIZE: {
-    width: 30,
-    height: 30,
-  },
+  CCTV_MARKER_SIZE_MIN: 16,
+  CCTV_MARKER_SIZE_MAX: 36,
   DEFAULT_CENTER: {
     lat: 37.5665,
     lng: 126.9780,
