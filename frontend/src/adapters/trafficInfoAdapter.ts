@@ -6,6 +6,7 @@
 
 import type { TrafficApiResponse } from '../types/traffic';
 import { API_BASE_URLS } from '../constants/api';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { isProduction, getItsApiKey } from '../utils/env';
 
 /**
@@ -17,9 +18,8 @@ export async function fetchTrafficInfoByArea(
   minY: number,
   maxY: number
 ): Promise<TrafficApiResponse> {
-  const url = isProduction()
-    ? buildProxyUrl(minX, maxX, minY, maxY)
-    : buildDirectUrl(minX, maxX, minY, maxY);
+  // TODO: Netlify Functions에서 ITS API 연결 타임아웃 이슈로 임시로 직접 호출
+  const url = buildDirectUrl(minX, maxX, minY, maxY);
 
   try {
     const response = await fetch(url);
@@ -34,6 +34,7 @@ export async function fetchTrafficInfoByArea(
 }
 
 /** 배포 환경: Netlify Function 프록시 경유 */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function buildProxyUrl(minX: number, maxX: number, minY: number, maxY: number): string {
   const params = new URLSearchParams({
     minX: minX.toString(),

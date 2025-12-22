@@ -140,7 +140,9 @@ Netlify 대시보드에서 환경변수를 설정하세요.
 - API 키가 클라이언트(브라우저 개발자도구)에 노출되지 않음
 - `frontend/netlify/functions/` 디렉토리에 함수 정의
 
-> **⚠️ 알려진 이슈:** Netlify Functions 서버(AWS 싱가포르 리전)에서 ITS API 서버(`openapi.its.go.kr`)로의 연결이 불안정합니다. 연결 타임아웃 발생 시 `cctvUrlAdapter.ts`에서 직접 호출로 임시 전환이 필요할 수 있습니다. (API 키 노출 감수)
+> **⚠️ 알려진 이슈:** Netlify Functions 서버(AWS 싱가포르 리전)에서 ITS API 서버(`openapi.its.go.kr`)로의 연결이 불안정합니다. 연결 타임아웃 발생 시 `cctvUrlAdapter.ts`, `trafficInfoAdapter.ts`에서 직접 호출로 임시 전환이 필요할 수 있습니다. (API 키 노출 감수)
+>
+> **현재 상태:** 직접 호출 모드로 운영 중. Netlify 환경변수(`OPENAPI_ITS_KEY`)가 아닌 빌드 시 환경변수(`REACT_APP_OPENAPI_ITS_KEY`)를 사용해야 합니다.
 
 ### 4. Rate Limiting
 
