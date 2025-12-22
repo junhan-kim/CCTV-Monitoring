@@ -20,9 +20,8 @@ export async function refreshCCTVUrl(cctv: CCTVInfo): Promise<CCTVUrlRefreshResp
     : ['its', 'ex'];
 
   for (const roadType of roadTypes) {
-    const url = isProduction()
-      ? buildProxyUrl(cctv, roadType)
-      : buildDirectUrl(cctv, roadType);
+    // TODO: Netlify Functions에서 ITS API 연결 타임아웃 이슈로 임시로 직접 호출
+    const url = buildDirectUrl(cctv, roadType);
 
     const response = await fetch(url);
 
